@@ -1,12 +1,13 @@
 [Unit]
-Description=openvfd
+Description=OpenVFD Service
+ConditionPathExists=/proc/device-tree/openvfd/
+ConditionPathExists=/etc/vfd.conf
 Wants=network-online.target
 
 [Service]
 Type=simple
-Environment="OPTS=-12h"
-ExecStartPre=/bin/sh -c ". /storage/.config/vfd.conf; /sbin/modprobe openvfd vfd_gpio_clk=$vfd_gpio_clk vfd_gpio_dat=$vfd_gpio_dat vfd_gpio_stb=$vfd_gpio_stb vfd_chars=$vfd_chars vfd_dot_bits=$vfd_dot_bits vfd_display_type=$vfd_display_type;"
-ExecStart=/your/path/to/OpenVFDService $OPTS &
+ExecStartPre=/bin/sh -c ". /etc/vfd.conf; /sbin/modprobe openvfd vfd_gpio_clk=$vfd_gpio_clk vfd_gpio_dat=$vfd_gpio_dat vfd_gpio_stb=$vfd_gpio_stb vfd_chars=$vfd_chars vfd_dot_bits=$vfd_dot_bits vfd_display_type=$vfd_display_type;"
+ExecStart=/usr/local/bin/OpenVFDService &
 ExecStop=/usr/bin/killall OpenVFDService
 ExecStopPost=-/sbin/rmmod openvfd
 
